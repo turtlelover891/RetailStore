@@ -1,0 +1,123 @@
+﻿@page
+@model retail.Pages.CustomerView.OrderPage
+@{
+}
+
+<h1>Order</h1>
+
+<h4>@Model.Customer.FullName()</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            string selectedRow1 = "";
+            if (product.ProductID == Model.ProductID)
+            {
+                selectedRow1 = "table-success";
+            }
+            <tr class="@selectedRow1">
+                <td>
+                    @Html.DisplayFor(modelItem => product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.ProductDescription)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => product.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Quantity)
+                </td>
+                <td>
+                    <a asp-page="./OrderPage" asp-route-id="@Model.Customer.CustomerID" asp-route-productid="@product.ProductID">Select</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.ProductID != null){
+    <form method="post">
+        <input type="hidden" name="CustomerID" value="@Model.Customer.CustomerID" />
+        <input type="hidden" name="productID" value="@Model.ProductID" />
+        <p>How many would you like to purchase?</p>
+        <input type="number" name="amount" value="1" step="1" min="1" max="@Model.Product.Quantity" />
+        <button type="submit">Submit</button>
+    </form>
+}
+
+<h2>Current Cart: </h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Quantity)
+            </th>
+            <th>
+                Total
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Customer.Cart != null)
+        {
+            if (Model.Customer.Cart.Details != null){
+                foreach (var detail in Model.Customer.Cart.Details)
+                {
+                    string selectedRow2 = "";
+                    if (detail.ProductID == Model.ProductID)
+                    {
+                        selectedRow2 = "table-success";
+                    }
+                    <tr class="@selectedRow2">
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Product.ProductName)
+                        </td>
+                        <td>
+                            $@Html.DisplayFor(modelItem => detail.Product.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Quantity)
+                        </td>
+                        <td>
+                            $@detail.getPrice()
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@Model.Customer.CustomerID" asp-route-productid="@detail.ProductID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<a class="front-button" asp-area="" asp-page="/CustomerView/Index" asp-route-id="@Model.Customer.CustomerID">Back</a>
+
+

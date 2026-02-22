@@ -1,0 +1,94 @@
+﻿@page
+@model retail.Pages.ManagerView.Carts.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Carts[0].Customer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Carts)
+        {
+            string selectedRow = "";
+            if (Model.Cart != null)
+            {
+                if (customer.CustomerID == Model.Cart.CustomerID)
+                {
+                    selectedRow = "table-success";
+                }
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @customer.Customer.FullName()
+                </td>
+                <td>
+                    <a asp-page="./index" asp-route-id="@customer.CartID">View Cart</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Cart != null){
+    <h1>Cart</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Total
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.Cart.Details)
+            {
+                <tr>
+                    <td>
+                        @detail.Product.ProductName
+                    </td>
+                    <td>
+                        @detail.Product.ProductDescription
+                    </td>
+                    <td>
+                        $@detail.Product.Price
+                    </td>
+                    <td>
+                        @detail.Quantity
+                    </td>
+                    <td>
+                        $@detail.getPrice()
+                    </td>
+                    <td>
+                        <a asp-page="/ManagerView/Products/Details" asp-route-id="@detail.ProductID">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a class="front-button" asp-area="" asp-page="/ManagerView/Index">Back</a>
+

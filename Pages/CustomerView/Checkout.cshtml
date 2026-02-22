@@ -1,0 +1,73 @@
+﻿@page
+@model retail.Pages.CustomerView.CheckoutModel
+@{
+}
+
+<h1>Review Items</h1>
+
+<h4>@Model.Customer.FullName()</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Quantity)
+            </th>
+            <th>
+                Total
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Customer.Cart != null)
+        {
+            if (Model.Customer.Cart.Details != null)
+            {
+                foreach (var detail in Model.Customer.Cart.Details)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Product.ProductName)
+                        </td>
+                        <td>
+                            $@Html.DisplayFor(modelItem => detail.Product.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Quantity)
+                        </td>
+                        <td>
+                            $@detail.getPrice()
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@Model.Customer.CustomerID" asp-route-productid="@detail.ProductID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+@if (Model.Customer.Cart != null)
+{
+    if (Model.Customer.Cart.Details != null)
+    {
+        if (Model.Customer.Cart.Details.Count != 0)
+        {
+            <strong>Total: $@Model.Total</strong>
+            <form method="post">
+                <input type="hidden" name="id" value="@Model.Customer.CustomerID" />
+                <button class="btn-primary" type="submit" name="action">Secure Order and Pay</button>
+            </form>
+        }
+    }
+}
+<p></p>
+<a class="front-button" asp-area="" asp-page="/CustomerView/Index" asp-route-id="@Model.Customer.CustomerID">Back</a>
+

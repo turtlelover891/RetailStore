@@ -1,0 +1,68 @@
+﻿@page
+@model retail.Pages.ManagerView.OrderProductModel
+@{
+}
+
+<h1>Order Products</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            string highlight = "";
+            if (product.ProductID == Model.productid){
+                highlight = "table-success";
+            }
+            <tr class="@highlight">
+                <td>
+                    @Html.DisplayFor(modelItem => product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.ProductDescription)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => product.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Quantity)
+                </td>
+                <td>
+                    <a asp-route-productid="@product.ProductID">Select</a>
+                    <span>|</span>
+                    <a asp-page="/Managerview/Products/Details" asp-route-id="@product.ProductID">Details</a>
+                    <span>|</span>
+                    <a asp-page="/Managerview/Products/Edit" asp-route-id="@product.ProductID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.productid != null)
+{
+    <form method="post">
+        <p>How many would you like to Order?</p>
+        <input type="number" name="amount" value="1" step="1" min="1" />
+        <button type="submit">Submit</button>
+    </form>
+}
+
+<p></p>
+<a class="front-button" asp-area="" asp-page="/ManagerView/Index">Back</a>

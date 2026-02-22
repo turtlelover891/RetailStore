@@ -1,0 +1,22 @@
+﻿@page
+@model retail.Pages.ManagerView.IndexModel
+@{
+}
+
+<div class="text-center">
+	<h1 class="display-4">Manager View</h1>
+	<div class="manager-view">
+		<h2>Views</h2>
+		<a class="front-button" asp-area="" asp-page="/ManagerView/Customers/Index">Customers</a>
+		<a class="front-button" asp-area="" asp-page="/ManagerView/Products/Index">Products</a>
+		<a class="front-button" asp-area="" asp-page="/ManagerView/Orders/Index">Orders</a>
+		<a class="front-button" asp-area="" asp-page="/ManagerView/Carts/Index">Carts</a>
+	</div>
+	<div class="manager-view">
+		<h2>Edits</h2>
+		<a class="front-button" asp-area="" asp-page="/ManagerView/OrderProduct">Order Products</a>
+
+	</div>
+</div>
+
+<a class="front-button" asp-area="" asp-page="/Index">Back</a>

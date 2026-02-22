@@ -1,0 +1,129 @@
+﻿@page
+@model retail.Pages.ManagerView.Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Orders</h1>
+
+<form>
+    <p>
+        <label>Customer Name: <input type="text" asp-for="SearchString" onchange="this.form.submit()" /></label>
+        <input type="submit" value="Filter" />
+    </p>
+    <div class="horizontal">
+        <p class="right-margin">Filter by:</p>
+        <div class="vertical">
+            <div>
+                <input type="radio" id="paid" value="paid" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="paid"> Paid </label>
+            </div>
+            <div>
+                <input type="radio" id="unpaid" value="unpaid" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="unpaid"> Unpaid </label>
+            </div>
+            <div>
+                <input type="radio" id="partial" value="partial" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="partial"> Partial </label>
+            </div>
+            <div>
+                <input type="radio" id="none" value="all" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="none"> All </label>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].Date)
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].PaymentStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders) {
+            string selected = "";
+            if (Model.Order != null){
+                if (Model.Order.OrderID == item.OrderID){
+                    selected = "table-success";
+                }
+            }
+            <tr class="@selected">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    $@item.getTotal()
+                </td>
+                <td>
+                    @item.Customer.FullName()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentStatus)
+                </td>
+                <td>
+                    <a asp-page="/ManagerView/Orders/Index" asp-route-id="@item.OrderID" asp-route-SearchString="@Model.SearchString">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (Model.Order != null){
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.Details[0].Product.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.Details[0].Product.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.Details[0].Quantity)
+                </th>
+                <th>
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Order.Details != null)
+            {
+                foreach (var detail in Model.Order.Details)
+                {
+                    <tr class="">
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Product.ProductName)
+                        </td>
+                        <td>
+                            $@Html.DisplayFor(modelItem => detail.Product.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Quantity)
+                        </td>
+                        <td>
+                            $@detail.getPrice()
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+<a class="front-button" asp-area="" asp-page="/ManagerView/Index">Back</a>

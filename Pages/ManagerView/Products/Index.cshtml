@@ -1,0 +1,58 @@
+﻿@page
+@model retail.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var product in Model.Product) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => product.ProductDescription)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => product.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => product.Quantity)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@product.ProductID">Details</a>
+                @if (User.Identity.IsAuthenticated){
+                    <span>|</span>
+                    <a asp-page="./Edit" asp-route-id="@product.ProductID">Edit</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<a class="front-button" asp-area="" asp-page="/ManagerView/Index" >Back</a>

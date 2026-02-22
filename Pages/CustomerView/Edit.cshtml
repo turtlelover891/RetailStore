@@ -1,0 +1,80 @@
+﻿@page
+@model retail.Pages.CustomerView.EditModel
+@{
+}
+
+<h2>Current Cart: </h2>
+
+<h4>@Model.Customer.FullName()</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Quantity)
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Customer.Cart != null)
+        {
+            if (Model.Customer.Cart.Details != null)
+            {
+                foreach (var detail in Model.Customer.Cart.Details)
+                {
+                    string selectedRow2 = "";
+                    if (detail.ProductID == Model.ProductID)
+                    {
+                        selectedRow2 = "table-success";
+                    }
+                    <tr class="@selectedRow2">
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Product.ProductName)
+                        </td>
+                        <td>
+                            $@Html.DisplayFor(modelItem => detail.Product.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Quantity)
+                        </td>
+                        <td>
+                            $@detail.getPrice()
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@Model.Customer.CustomerID" asp-route-productid="@detail.ProductID">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@if (Model.ProductID != null){
+    <form method="post">
+        <input type="hidden" name="CustomerID" value="@Model.Customer.CustomerID" />
+        <input type="hidden" name="productID" value="@Model.ProductID" />
+        <p>How many would you like to change to?</p>
+        <input type="number" name="amount" value="@Model.Detail.Quantity" step="1" min="1" max="@Model.Detail.Product.Quantity" />
+        <button class="btn-primary" type="submit" name="action" value="change">Change</button>
+        <button class="btn-danger" type="submit" name="action" value="delete">Delete</button>
+        <p>Maximum in stock: @Model.Detail.Product.Quantity</p>
+        <p>@Model.ErrorMessage</p>
+    </form>
+}
+
+<p></p>
+<a class="front-button" asp-area="" asp-page="/CustomerView/Index" asp-route-id="@Model.Customer.CustomerID">Back</a>
+
+
+

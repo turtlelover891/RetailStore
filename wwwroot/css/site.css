@@ -1,0 +1,78 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #cccccc;
+}
+
+nav {
+    background-color: #909090;
+}
+
+.topic {
+    border: solid;
+    border-color: #dddddd;
+    background-color: #ffffff;
+    margin: 20px 0;
+    padding: 15px;
+}
+
+.nav-item {
+    background-color: #fcfcfc;
+    border: solid;
+    border-color: #dddddd;
+    margin: 5px;
+}
+
+.front-button {
+    display: inline-block;
+    background-color: #fcfcfc;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #404040;
+    padding: 5px 10px 6px;
+    border: solid;
+    border-color: #dddddd;
+    margin-bottom: 5px;
+}
+
+select {
+    margin-bottom: 50px;
+}
+
+.horizontal {
+    display: flex;
+}
+
+.manager-view {
+    border: solid;
+    border-color: #aaaaaa;
+    padding: 15px;
+    margin: 5px;
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.right-margin {
+    margin-right: 10px;
+}

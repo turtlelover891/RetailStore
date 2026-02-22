@@ -1,0 +1,163 @@
+﻿@page
+@model retail.Pages.Customers.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            string selectedRow = "";
+            if (Model.Customer != null){
+                if (customer.CustomerID == Model.Customer.CustomerID)
+                {
+                    selectedRow = "table-success";
+                }
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => customer.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.PhoneNumber)
+                </td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@customer.CustomerID" asp-route-showCart="@Model.ShowCart" asp-route-showOrders="@Model.ShowOrders">Select</a>
+                    <span> | </span>
+                    <a asp-page="./Details" asp-route-id="@customer.CustomerID">Details</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>|</span>
+                        <a asp-page="./Edit" asp-route-id="@customer.CustomerID">Edit</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@if (Model.Customer != null){
+    <div class="manager-view text-center">
+        <h3>View</h3>
+        @{
+            string CartBorder = "";
+            string OrdersBorder = "";
+            if (Model.ShowCart) CartBorder = "border-info";
+            if (Model.ShowOrders) OrdersBorder = "border-info";
+        }
+        <a class="front-button @CartBorder" asp-area="" asp-page="./Index" asp-route-id="@Model.Customer.CustomerID" asp-route-showCart="true">Cart</a>
+        <a class="front-button @OrdersBorder" asp-area="" asp-page="./Index" asp-route-id="@Model.Customer.CustomerID" asp-route-showOrders="true">Orders</a>
+    </div>
+    if (Model.Customer.Orders != null && Model.ShowOrders)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Orders[0].Date)
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Orders[0].PaymentStatus)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Customer.Orders)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.Date)
+                        </td>
+                        <td>
+                            $@order.getTotal()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.PaymentStatus)
+                        </td>
+                        <td>
+                            <a asp-page="/ManagerView/Orders/Index" asp-route-id="@order.OrderID" asp-route-SearchString="@Model.Customer.FullName()">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    if (Model.Customer.Cart != null && Model.ShowCart){
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Product.ProductName)
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Cart.Details[0].Quantity)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.Customer.Cart.Details)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Product.ProductName)
+                        </td>
+                        <td>
+                            $@detail.getPrice()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => detail.Quantity)
+                        </td>
+                        <td>
+                            <a asp-page="/ManagerView/Products/Details" asp-route-id="@detail.ProductID" >Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+<a class="front-button" asp-area="" asp-page="/ManagerView/Index" >Back</a>

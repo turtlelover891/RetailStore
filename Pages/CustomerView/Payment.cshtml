@@ -1,0 +1,104 @@
+﻿@page
+@model retail.Pages.CustomerView.PaymentModel
+@{
+}
+
+<h1>Customer</h1>
+<h4>Payment for @Model.Customer.FullName()</h4>
+
+<form method="get">
+    <input type="hidden" name="id" value="@Model.Customer.CustomerID" />
+    <input type="hidden" name="orderid" value="@Model.OrderID" />
+    <div class="horizontal">
+        <p class="right-margin">Filter by:</p>
+        <div class="vertical">
+            <div>
+                <input type="radio" id="paid" value="paid" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="paid"> Paid </label>
+            </div>
+            <div>
+                <input type="radio" id="unpaid" value="unpaid" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="unpaid"> Unpaid </label>
+            </div>
+            <div>
+                <input type="radio" id="partial" value="partial" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="partial"> Partial </label>
+            </div>
+            <div>
+                <input type="radio" id="none" value="all" asp-for="@Model.Filter" onchange="this.form.submit()" />
+                <label for="none"> All </label>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Orders[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Orders[0].PaymentStatus)
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                Paid
+            </th>
+            <th>
+                Amount Due
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Orders != null){
+            foreach (var order in Model.Orders)
+            {
+                string selectedRow1 = "";
+                if (order.OrderID == Model.OrderID)
+                {
+                    selectedRow1 = "table-success";
+                }
+                <tr class="@selectedRow1">
+                    <td>
+                        @Html.DisplayFor(modelItem => order.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => order.PaymentStatus)
+                    </td>
+                    <td>
+                        $@order.getTotal()
+                    </td>
+                    <td>
+                        $@order.Paid
+                    </td>
+                    <td>
+                        $@(order.getTotal() - order.Paid)
+                    </td>
+                    <td>
+                        <a asp-page="./Payment" asp-route-id="@Model.Customer.CustomerID" asp-route-orderid="@order.OrderID" asp-route-Filter="@Model.Filter">Select</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@if (Model.OrderID != null)
+{
+    if (Model.Order != null)
+    {
+        <form method="post">
+            <input type="hidden" name="id" value="@Model.Customer.CustomerID" />
+            <input type="hidden" name="orderid" value="@Model.OrderID" />
+            <p>Choose how much to pay:</p>
+            <input type="number" name="amount" value="@(Model.Order.getTotal() - Model.Order.Paid)" step="0.01" min="0" max="@(Model.Order.getTotal() - Model.Order.Paid)" />
+            <button class="btn-primary" type="submit" name="action" value="pay">Pay</button>
+        </form>
+    }
+}
+<p></p>
+<a class="front-button" asp-area="" asp-page="/CustomerView/Index" asp-route-id="@Model.Customer.CustomerID">Back</a>

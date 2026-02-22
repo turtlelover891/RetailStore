@@ -1,0 +1,26 @@
+﻿@page
+@model CustomerModel
+@{
+}
+
+<div class="text-center">
+	<h1 class="display-4">Online Retail Store</h1>
+	<form method="post">
+		<div class="form-group horizontal">
+			<span class="text-danger">*</span>
+			<label class="control-label">Please Select a Customer</label>
+			<select class="form-control" asp-for="@Model.CustomerID" asp-items="Model.CustomerNameSL" onchange="this.form.submit()">
+				<option value="">None</option>
+			</select>
+		</div>
+	</form>
+	@if (Model.CustomerID != null)
+	{
+		<a class="front-button" asp-area="" asp-page="/CustomerView/OrderPage" asp-route-id="@Model.CustomerID">Place an Order</a>
+		<a class="front-button" asp-area="" asp-page="/CustomerView/Edit" asp-route-id="@Model.CustomerID">Edit Cart</a>
+		<a class="front-button" asp-area="" asp-page="/CustomerView/Checkout" asp-route-id="@Model.CustomerID">Checkout</a>
+		<a class="front-button" asp-area="" asp-page="/CustomerView/Payment" asp-route-id="@Model.CustomerID">Make a Payment</a>
+	}
+</div>
+<p></p>
+<a class="front-button" asp-area="" asp-page="/Index">Back</a>
